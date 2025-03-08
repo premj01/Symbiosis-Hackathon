@@ -78,7 +78,14 @@ export default function NavigationBar() {
               alt=""
             />
           </div>
-          <p className="font-bold text-inherit">MakeMyPlan</p>
+          <p className="font-bold text-inherit" style={{ marginRight: "30px" }}>
+            MakeMyPlan
+          </p>
+          <NavbarItem>
+            <Link color="foreground" to="/home">
+              Home
+            </Link>
+          </NavbarItem>
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" to="#">
@@ -88,11 +95,6 @@ export default function NavigationBar() {
         <NavbarItem isActive>
           <Link aria-current="page" to="#">
             LeaderBoard
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" to="#">
-            ..
           </Link>
         </NavbarItem>
       </NavbarContent>
@@ -117,6 +119,12 @@ export default function NavigationBar() {
           <NavbarItem>
             <ThemeChange></ThemeChange>
           </NavbarItem>
+
+          <NavbarItem className="hidden lg:flex">
+            <Link to="/profile">
+              <Avatar name={localStorage.getItem("username") | "NA"} />
+            </Link>
+          </NavbarItem>
         </NavbarContent>
       ) : (
         <NavbarContent justify="end">
@@ -130,6 +138,11 @@ export default function NavigationBar() {
           </NavbarItem>
           <NavbarItem>
             <ThemeChange></ThemeChange>
+          </NavbarItem>
+          <NavbarItem className="hidden lg:flex">
+            <Link to="/profile">
+              <Avatar name={localStorage.getItem("username") | "NA"} />
+            </Link>
           </NavbarItem>
         </NavbarContent>
       )}
