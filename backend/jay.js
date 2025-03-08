@@ -26,6 +26,11 @@ const formatDate = (date) => {
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
+,//Nikhil changes
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
     }).format(date);
 };
 
