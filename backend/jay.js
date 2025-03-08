@@ -18,6 +18,44 @@ class Task {
     }
 }
 
+class Task2 {
+    constructor(title, description = '') {
+        this.title = title;
+        this.description = description;
+        this.completed = false;
+        this.createdAt = new Date();
+    }
+
+    toggleComplete() {
+        this.completed = !this.completed;
+        return this.completed;
+    }
+
+    getStatus() {
+        return this.completed ? 'Completed' : 'Pending';
+    }
+}
+
+class Task3 {
+    constructor(title, description = '') {
+        this.title = title;
+        this.description = description;
+        this.completed = false;
+        this.createdAt = new Date();
+    }
+
+    toggleComplete() {
+        this.completed = !this.completed;
+        return this.completed;
+    }
+
+    getStatus() {
+        return this.completed ? 'Completed' : 'Pending';
+    }
+}
+
+
+
 // Utility functions
 const formatDate = (date) => {
     return new Intl.DateTimeFormat('en-US', {
