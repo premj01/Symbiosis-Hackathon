@@ -1,44 +1,98 @@
 const mongoose = require('mongoose');
 
-const studyPreferenceSchema = new mongoose.Schema({
-    email: {
+const moduleSchema = new mongoose.Schema({
+    title: {
         type: String,
-        required: [true, 'Email is required'],
-        trim: true,
-        lowercase: true
+        required: true
     },
-    lang: {
+    description: {
         type: String,
-        required: [true, 'Programming language is required'],
-        trim: true
-    },
-    level: {
-        type: String,
-        required: [true, 'Level is required'],
-        enum: ['base', 'intermediate', 'advance'],
-        trim: true
-    },
-    weeks: {
-        type: Number,
-        required: [true, 'Number of weeks is required'],
-        min: [1, 'Duration must be at least 1 week'],
-        max: [52, 'Duration cannot exceed 52 weeks']
+        required: true
     },
     startDate: {
         type: Date,
-        required: [true, 'Start date is required'],
-        validate: {
-            validator: function(value) {
-                return value >= new Date();
-            },
-            message: 'Start date must be in the future'
-        }
+        required: true
     },
-    createdAt: {
+    endDate: {
         type: Date,
-        default: Date.now
+        required: true
     },
-    lastUpdated: {
+    completed: {
+        type: Boolean,
+        default: false
+    },
+    resources: [{
+        title: String,
+        url: String,
+        type: String // video, article, practice, etc.
+    }],
+    quizId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Quiz'
+    }
+});
+
+const studyPlanSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String
+    },
+    modules: [moduleSchema],
+    progress: {
+        type: Number,
+        default: 0 // Percentage of completion
+    }
+});
+
+const studyPreferenceSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    subject: {
+        type: String,
+        required: [true, 'Subject name is required'],
+        trim: true
+    },
+    duration: {
+        type: Number,
+        required: [true, 'Duration in weeks is required'],
+        min: [1, 'Duration must be at least 1 week']
+    },
+    startDate: {
+        type: String,
+        required: [true, 'Start date is required']
+    },
+    level: {
+        type: String,
+        required: [true, 'Proficiency level is required'],
+        enum: ['beginner', 'intermediate', 'expert'],
+        lowercase: true
+    },
+    dailyStudyTime: {
+        type: Number, // in minutes
+        default: 60
+    },
+    learningGoal: {
+        type: String,
+        enum: ['academic', 'practical', 'both'],
+        default: 'both'
+    },
+    studyPlan: studyPlanSchema,
+    quizResults: [{
+        quizId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Quiz'
+        },
+        score: Number,
+        maxScore: Number,
+        completedAt: Date
+    }],
+    createdAt: {
         type: Date,
         default: Date.now
     }

@@ -214,25 +214,25 @@ function getMockVerificationQuestions(lang, level) {
             ];
         }
     }
+        // questions should e defined by gemini ai , questions and options should be defined by gemini ai according to the level of the user , and also correctanswer among them
     
-    // Default mock questions for any language/level
     return [
         {
-            "question": `What is a key feature of ${level} ${lang} programming?`,
+            "question": `string`,
             "options": ["Option A", "Option B", "Option C", "Option D"],
             "correctAnswer": "Option C",
             "points": 10,
             "conceptTested": `${level} ${lang} concepts`
         },
         {
-            "question": `How do you implement error handling in ${lang}?`,
+            "question": `string`,
             "options": ["Method 1", "Method 2", "Method 3", "Method 4"],
             "correctAnswer": "Method 2",
             "points": 10,
             "conceptTested": "Error handling"
         },
         {
-            "question": `What is the best practice for code organization in ${lang}?`,
+            "question": `string`,
             "options": ["Approach 1", "Approach 2", "Approach 3", "Approach 4"],
             "correctAnswer": "Approach 3",
             "points": 10,
