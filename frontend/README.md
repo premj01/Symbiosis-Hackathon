@@ -1,3 +1,1 @@
-"# Symbiosis-Hackathon"  
-jay 
-hello
+"# Symbiosis-Hackathon" 
