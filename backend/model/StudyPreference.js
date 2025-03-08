@@ -1,30 +1,53 @@
 const mongoose = require('mongoose');
 
 const studyPreferenceSchema = new mongoose.Schema({
-    subject: {
+    email: {
         type: String,
-        required: [true, 'Subject name is required'],
+        required: [true, 'Email is required'],
+        trim: true,
+        lowercase: true
+    },
+    lang: {
+        type: String,
+        required: [true, 'Programming language is required'],
         trim: true
-    },
-    duration: {
-        type: Number,
-        required: [true, 'Duration in weeks is required'],
-        min: [1, 'Duration must be at least 1 week']
-    },
-    startDate: {
-        type: String,
-        required: [true, 'Start date is required']
     },
     level: {
         type: String,
-        required: [true, 'Proficiency level is required'],
-        enum: ['beginner', 'intermediate', 'expert'],
-        lowercase: true
+        required: [true, 'Level is required'],
+        enum: ['base', 'intermediate', 'advance'],
+        trim: true
+    },
+    weeks: {
+        type: Number,
+        required: [true, 'Number of weeks is required'],
+        min: [1, 'Duration must be at least 1 week'],
+        max: [52, 'Duration cannot exceed 52 weeks']
+    },
+    startDate: {
+        type: Date,
+        required: [true, 'Start date is required'],
+        validate: {
+            validator: function(value) {
+                return value >= new Date();
+            },
+            message: 'Start date must be in the future'
+        }
     },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    lastUpdated: {
+        type: Date,
+        default: Date.now
     }
+});
+
+// Update lastUpdated timestamp before saving
+studyPreferenceSchema.pre('save', function(next) {
+    this.lastUpdated = new Date();
+    next();
 });
 
 const StudyPreference = mongoose.model('StudyPreference', studyPreferenceSchema);

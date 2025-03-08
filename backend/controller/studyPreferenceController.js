@@ -3,14 +3,32 @@ const StudyPreference = require('../model/StudyPreference');
 // Create new study preference
 exports.createStudyPreference = async (req, res) => {
     try {
-        const { subject, duration, startDate, level } = req.body;
+        const { email, lang, level, weeks, startDate } = req.body;
+
+        // Validate required fields
+        if (!email || !lang || !level || !weeks || !startDate) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Email, programming language, level, weeks, and start date are required'
+            });
+        }
+
+        // Validate start date
+        const startDateObj = new Date(startDate);
+        if (isNaN(startDateObj.getTime())) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Invalid start date format. Please use YYYY-MM-DD format'
+            });
+        }
 
         // Create new study preference
         const studyPreference = await StudyPreference.create({
-            subject,
-            duration,
-            startDate,
-            level
+            email,
+            lang,
+            level,
+            weeks,
+            startDate: startDateObj
         });
 
         res.status(201).json({
@@ -30,7 +48,16 @@ exports.createStudyPreference = async (req, res) => {
 // Get all study preferences
 exports.getAllStudyPreferences = async (req, res) => {
     try {
-        const studyPreferences = await StudyPreference.find();
+        const { email } = req.query;
+        let query = {};
+        
+        // If email is provided, filter by email
+        if (email) {
+            query.email = email.toLowerCase();
+        }
+
+        const studyPreferences = await StudyPreference.find(query)
+            .sort({ startDate: 1 }); // Sort by start date ascending
 
         res.status(200).json({
             status: 'success',
@@ -76,9 +103,31 @@ exports.getStudyPreference = async (req, res) => {
 // Update study preference
 exports.updateStudyPreference = async (req, res) => {
     try {
+        const updates = req.body;
+        
+        // Prevent email modification
+        if (updates.email) {
+            delete updates.email;
+        }
+
+        // Validate start date if provided
+        if (updates.startDate) {
+            const startDateObj = new Date(updates.startDate);
+            if (isNaN(startDateObj.getTime())) {
+                return res.status(400).json({
+                    status: 'fail',
+                    message: 'Invalid start date format. Please use YYYY-MM-DD format'
+                });
+            }
+            updates.startDate = startDateObj;
+        }
+
         const studyPreference = await StudyPreference.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            { 
+                ...updates,
+                lastUpdated: new Date() 
+            },
             {
                 new: true,
                 runValidators: true
