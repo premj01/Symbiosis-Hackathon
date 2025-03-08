@@ -57,7 +57,7 @@ const register = async (req, res, next) => {
       }
     }
     else {
-      return res.status(401).json({ message: "Halva samje ho kya f***" });
+      return res.status(401).json({ message: "Please fill all the fields" });
     }
 
     const otp = getOTP();
@@ -111,7 +111,7 @@ const validOTP = async (req, res, next) => {
     const { SecCode, otp } = req.body;
 
     if (!(SecCode && otp)) {
-      return res.status(401).json({ message: 'Bro I am not your type !!!' })
+      return res.status(401).json({ message: 'Please fill all the fields' })
     }
 
     jwt.verify(SecCode, secretKey, async function (err, decoded) {
@@ -171,7 +171,7 @@ const signIn = async (req, res, next) => {
     const { mail, password } = req.body;
 
     if (!(mail && password)) {
-      return res.status(404).json({ message: 'Chill bro we have Highlevel of Security', code: '01000110 01110101 01100011 01101011 00100000 01111001 01101111 01110101' })
+      return res.status(404).json({ message: 'Please fill all the fields', code: '01000110 01110101 01100011 01101011 00100000 01111001 01101111 01110101' })
     }
 
     const UserInfoExist = await userModel.findOne({ mail: mail });
