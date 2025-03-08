@@ -22,6 +22,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  userpoints: {
+    type: Number,
+    default: 0
+  },
+  userRank: {
+    type: Number,
+    default: 0
+  },
   expiry: {
     type: Date,
     required: true

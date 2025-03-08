@@ -14,7 +14,7 @@ import LoginPage from "./LoginPage.jsx";
 import SignupPage from "./SignupPage.jsx";
 import OTPValidationPage from "./OTPValidationPage.jsx";
 import AuthContextWrapper from "./contextProvider/AuthContext.jsx";
-import { AddCategory } from "./QuestionManagement/AddCategory.jsx";
+import AddCategory from "./QuestionManagement/AddCategory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,8 +27,6 @@ const router = createBrowserRouter([
       { path: "signup", element: <SignupPage /> },
       { path: "otp_validate", element: <OTPValidationPage /> },
       { path: "add_category", element: <AddCategory /> },
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "profile", element: <Profile /> },
     ],
   },
 ]);

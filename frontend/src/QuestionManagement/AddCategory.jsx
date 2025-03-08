@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { format, addWeeks } from "date-fns";
-import { FaBook, FaCalendar } from "react-icons/fa";
+import { Input, Button, RadioGroup, Radio, Calendar } from "@heroui/react";
+import { FaBook, FaCalendar, FaClock, FaGraduationCap } from "react-icons/fa";
+import { parseDate } from "@internationalized/date";
 import axios from "axios";
 
 const AddCategory = () => {
@@ -13,10 +9,10 @@ const AddCategory = () => {
     topic: "",
     numberOfWeeks: "",
     difficultyLevel: "beginner",
-    startDate: new Date(),
+    startDate: new Date().toISOString().split("T")[0],
   });
 
-  const [endDate, setEndDate] = useState(null);
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,133 +20,134 @@ const AddCategory = () => {
       ...prev,
       [name]: value,
     }));
-
-    // Calculate end date when number of weeks changes
-    if (name === "numberOfWeeks" && value > 0) {
-      const calculatedEndDate = addWeeks(formData.startDate, parseInt(value));
-      setEndDate(calculatedEndDate);
-    }
   };
 
   const handleDateChange = (date) => {
     setFormData((prev) => ({
       ...prev,
-      startDate: date,
+      startDate: new Date(date).toISOString().split("T")[0],
     }));
-
-    if (formData.numberOfWeeks) {
-      const calculatedEndDate = addWeeks(
-        date,
-        parseInt(formData.numberOfWeeks)
-      );
-      setEndDate(calculatedEndDate);
-    }
+    setShowStartCalendar(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/categories", {
-        ...formData,
-        endDate,
-      });
+      const response = await axios.post("/api/categories", formData);
       console.log("Category added successfully:", response.data);
-      // Add success notification or redirect logic here
+      setFormData({
+        topic: "",
+        numberOfWeeks: "",
+        difficultyLevel: "beginner",
+        startDate: new Date().toISOString().split("T")[0],
+      });
     } catch (error) {
       console.error("Error adding category:", error);
-      // Add error handling logic here
     }
   };
 
   return (
     <main className="dark text-foreground bg-background min-h-screen p-8">
-      <div className="max-w-2xl mx-auto bg-card rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-          <FaBook className="text-primary" />
-          Add New Learning Category
+      <div className="max-w-2xl mx-auto bg-card rounded-xl shadow-lg p-8 border border-border">
+        <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
+          <FaBook className="text-primary text-2xl" />
+          Create Learning Path
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-2">
-            <Label htmlFor="topic">Topic Name</Label>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <FaGraduationCap className="text-primary" />
+              Topic Name
+            </label>
             <Input
-              id="topic"
               name="topic"
               value={formData.topic}
               onChange={handleInputChange}
               placeholder="Enter topic name"
+              className="w-full"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="numberOfWeeks">Number of Weeks</Label>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <FaClock className="text-primary" />
+              Duration (Weeks)
+            </label>
             <Input
-              id="numberOfWeeks"
               name="numberOfWeeks"
               type="number"
               min="1"
               value={formData.numberOfWeeks}
               onChange={handleInputChange}
               placeholder="Enter number of weeks"
+              className="w-full"
               required
             />
           </div>
 
+          <div className="space-y-4">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <FaGraduationCap className="text-primary" />
+              Difficulty Level
+            </label>
+            <div className="grid grid-cols-3 gap-4">
+              {["beginner", "moderate", "advanced"].map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, difficultyLevel: level }))
+                  }
+                  className={`p-3 rounded-lg border transition-all duration-200 capitalize ${
+                    formData.difficultyLevel === level
+                      ? "bg-primary border-primary-focus text-primary-foreground"
+                      : "bg-card border-border hover:border-primary"
+                  }`}
+                >
+                  {level}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <Label>Difficulty Level</Label>
-            <RadioGroup
-              name="difficultyLevel"
-              value={formData.difficultyLevel}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, difficultyLevel: value }))
-              }
-              className="flex flex-col space-y-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="beginner" id="beginner" />
-                <Label htmlFor="beginner">Beginner</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="moderate" id="moderate" />
-                <Label htmlFor="moderate">Moderate</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="advanced" id="advanced" />
-                <Label htmlFor="advanced">Advanced</Label>
-              </div>
-            </RadioGroup>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <FaCalendar />
-                Start Date
-              </Label>
-              <Calendar
-                mode="single"
-                selected={formData.startDate}
-                onSelect={handleDateChange}
-                className="rounded-md border"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <FaCalendar />
-                End Date (Calculated)
-              </Label>
-              <div className="p-4 rounded-md border bg-muted">
-                {endDate
-                  ? format(endDate, "PPP")
-                  : "Select start date and weeks"}
-              </div>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <FaCalendar className="text-primary" />
+              Start Date
+            </label>
+            <div className="relative">
+              <Button
+                onClick={() => setShowStartCalendar(!showStartCalendar)}
+                type="button"
+                className={`w-full justify-start text-left ${
+                  showStartCalendar ? "border-primary" : ""
+                }`}
+              >
+                {new Date(formData.startDate).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </Button>
+              {showStartCalendar && (
+                <div className="absolute z-10 mt-2 bg-popover border border-border shadow-xl rounded-lg">
+                  <Calendar
+                    aria-label="Start Date"
+                    value={parseDate(formData.startDate)}
+                    onChange={handleDateChange}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
-          <Button type="submit" className="w-full">
-            Create Your Plan
+          <Button
+            type="submit"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 py-3 rounded-lg font-medium shadow-lg transition-all duration-200"
+          >
+            Create Your Learning Path
           </Button>
         </form>
       </div>
