@@ -60,7 +60,7 @@ export default function NavigationBar() {
               alt=""
             />
           </div>
-          <p className="font-bold text-inherit">MakeMyCode</p>
+          <p className="font-bold text-inherit">MakeMyPlan</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -77,7 +77,7 @@ export default function NavigationBar() {
               alt=""
             />
           </div>
-          <p className="font-bold text-inherit">MakeMyCode</p>
+          <p className="font-bold text-inherit">MakeMyPlan</p>
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" to="#">
