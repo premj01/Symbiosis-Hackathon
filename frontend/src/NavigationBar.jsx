@@ -88,7 +88,7 @@ export default function NavigationBar() {
           </NavbarItem>
         </NavbarBrand>
         <NavbarItem>
-          <Link color="foreground" to="#">
+          <Link color="foreground" to="/dashboard">
             Dashboard
           </Link>
         </NavbarItem>
