@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaCalendarAlt, FaUsers, FaPalette } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
+import { Button } from "@heroui/react";
+import { FaRegUser } from "react-icons/fa";
 
 const Home = () => {
   return (
@@ -17,15 +19,15 @@ const Home = () => {
               Track your Schedule with Easy Handling
             </p>
             <div className="mt-8 flex items-center justify-center gap-x-6">
-              <Link to="/get-started">
-                <button className="rounded-md bg-primary px-6 py-3 text-lg font-semibold text-white shadow-sm hover:bg-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-300 flex items-center gap-2">
+              <Link to="/signup">
+                <Button color="secondary" variant="bordered">
                   Get Started <BsArrowRight className="inline-block" />
-                </button>
+                </Button>
               </Link>
               <Link to="/signin">
-                <button className="rounded-md px-6 py-3 text-lg font-semibold border-2 border-foreground/20 hover:bg-foreground/10 transition-all duration-300">
-                  Sign In
-                </button>
+                <Button color="" variant="bordered">
+                  <FaRegUser /> SignIN
+                </Button>
               </Link>
             </div>
           </div>

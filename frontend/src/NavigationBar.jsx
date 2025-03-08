@@ -12,6 +12,7 @@ import {
 import ThemeChange from "./ThemeChange";
 import { Link } from "react-router-dom";
 import { AuthenticationContext } from "./contextProvider/AuthContext";
+import { Avatar } from "@heroui/react";
 
 // export const AcmeLogo = () => {
 //   return (
@@ -81,17 +82,17 @@ export default function NavigationBar() {
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" to="#">
-            Features
+            Dashboard
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
           <Link aria-current="page" to="#">
-            Customers
+            LeaderBoard
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" to="#">
-            Integrations
+            ..
           </Link>
         </NavbarItem>
       </NavbarContent>
