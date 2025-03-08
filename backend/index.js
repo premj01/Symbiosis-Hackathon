@@ -57,7 +57,7 @@ studyplan = [
         
     }
 
-
+// go to hell
 
     
 ]
